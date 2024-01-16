@@ -11,8 +11,23 @@ posts = [
 ]
 
 users = [
-    {id : "1" , username : "moinak"},
-    { id : "2" , username : "shubhradip"}
+    { id : "1" , username : "moinak"},
+    { id : "2" , username : "shubhradip"},
+    { id : "3" , username : "arka"},
+    { id : "4" , username : "aditi"},
+    { id : "5" , username : "amit"},
+    { id : "6" , username : "anand"},
+]
+
+friends = [
+    {id:"1", friend_id:"2"},
+    {id:"2", friend_id:"1"},
+    {id:"1", friend_id:"3"},
+    {id:"3", friend_id:"1"},
+    {id:"1", friend_id:"4"},
+    {id:"4", friend_id:"1"},
+    {id:"1", friend_id:"5"},
+    {id:"5", friend_id:"1"},
 ]
 
 const QueryRoot  = new graphql.GraphQLObjectType({
@@ -63,7 +78,9 @@ const QueryRoot  = new graphql.GraphQLObjectType({
                 console.log(filtered_posts)
                 return filtered_posts
             }
-        }
+        },
+
+        
     })
 });
 
@@ -101,7 +118,22 @@ const UserType = new graphql.GraphQLObjectType({
                 })
                 return filtered_posts
             }
-        }
+        },
+        friends: {
+            type: graphql.GraphQLList(UserType),
+            resolve: (parent, args) => {
+                const own_id = parent.id;
+                const userFriends = friends
+                    .filter((friend) => friend.id === own_id)
+                    .map((friend) => {
+                        const friendUser = users.find((user) => user.id === friend.friend_id);
+                        return friendUser;
+                    });
+
+                return userFriends;
+            },
+        },
+        
     })
 });
 
