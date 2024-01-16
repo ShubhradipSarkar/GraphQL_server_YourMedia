@@ -12,7 +12,8 @@
 - user ( id: id, friend) : returns user who are friends of a user
 - posts : all posts
 - post (id : id) : return posts for a user with userid : id
-- friends (id : id) : returns friends of a user with userid: id
+- friends (id : user_id) : returns friends of a user with userid : user_id
+- likes (id : post_id) : returns all likes of post with id : post_id
 
 
 

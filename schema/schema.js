@@ -30,6 +30,13 @@ friends = [
     {id:"5", friend_id:"1"},
 ]
 
+likes = [
+    {post_id:1, liked_by:"1"},
+    {post_id:2, liked_by:"1"},
+    {post_id:1, liked_by:"2"},
+    {post_id:1, liked_by:"3"},
+]
+
 const QueryRoot  = new graphql.GraphQLObjectType({
     name : 'Query',
     fields : () => ({
@@ -100,6 +107,20 @@ const PostType = new graphql.GraphQLObjectType({
                 return filtered_users[0]
             }
         },
+        likes:{
+            type: graphql.GraphQLList(UserType),
+            resolve: (parent, args)=>{
+                const post_id = parent.id;
+                const likers = likes
+                    .filter((like) => like.post_id === post_id)
+                    .map((like) => {
+                        const UserLikes = users.find((user) => user.id === like.liked_by);
+                        return UserLikes;
+                    });
+
+                return likers;
+            }
+        }
     })
 })
 
