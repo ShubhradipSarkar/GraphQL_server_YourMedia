@@ -17,7 +17,7 @@ const QueryRoot  = new graphql.GraphQLObjectType({
             },
             resolve : async(_,args)=>{
                 const userid = args.id;
-                const filtered_users = await users.find({id: userid});
+                const filtered_users = await users.find({_id: userid});
                 return filtered_users[0]
             }
         },
@@ -29,7 +29,7 @@ const QueryRoot  = new graphql.GraphQLObjectType({
             },
             resolve : async(_,args)=>{
                 const postid=args.post_id
-                const filtered_post = await posts.find({id: Number(postid)});
+                const filtered_post = await posts.find({_id: postid});
                 return filtered_post[0]
             }
         },
@@ -60,7 +60,7 @@ const PostType = new graphql.GraphQLObjectType({
             type : UserType,
             resolve : async(post,args)=>{
                 const userid = post.user;
-                const filtered_users = await users.find({id:userid});
+                const filtered_users = await users.find({_id:userid});
                 return filtered_users[0];
             }
         },
@@ -68,13 +68,13 @@ const PostType = new graphql.GraphQLObjectType({
         likes:{
             type: graphql.GraphQLList(UserType),
             resolve: async(parent, args)=>{
-                const post_id = parent.id;
+                const post_id = parent._id;
                 
-                const likers = await likes.find({ post_id });
+                const likers = await likes.find({ post_id : post_id });
                    
                 const likerIds = likers.map((like) => like.liked_by);
                 try {
-                    const UsersWhoLiked = await users.find({ id: { $in: likerIds } });
+                    const UsersWhoLiked = await users.find({ _id: { $in: likerIds } });
                     return UsersWhoLiked;
                 } catch (error) {
                     console.error('Error:', error.message);
@@ -95,7 +95,8 @@ const UserType = new graphql.GraphQLObjectType({
         posts : {
             type : graphql.GraphQLList(PostType),
             resolve : async(parent,args)=>{
-                const userid = parent.id;
+                const userid = parent._id;
+                
                 const filtered_posts = await posts.find({user : userid});
                 return filtered_posts;
             }
@@ -104,11 +105,11 @@ const UserType = new graphql.GraphQLObjectType({
         friends: {
             type: graphql.GraphQLList(UserType),
             resolve: async(parent, args) => {
-                const own_id = parent.id;
+                const own_id = parent._id;
                 const userFriends = await friends.find({id:own_id});
                 const friendIds = userFriends.map((friend) => friend.friend_id);
                 try {
-                    const Users = await users.find({ id: { $in: friendIds } });
+                    const Users = await users.find({ _id: { $in: friendIds } });
                     return Users;
                 } catch (error) {
                     console.error('Error:', error.message);

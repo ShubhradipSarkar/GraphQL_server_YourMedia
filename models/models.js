@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  id: String,
+  
   username: String,
 });
 
 const postSchema = new mongoose.Schema({
-  id: String,
+  
   message: String,
   user: String,
 });
