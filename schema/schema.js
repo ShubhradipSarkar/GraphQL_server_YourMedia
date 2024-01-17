@@ -44,11 +44,31 @@ const QueryRoot  = new graphql.GraphQLObjectType({
                 return filtered_posts
             }
         },
-
-        
     })
 });
 
+const MutationRoot = new graphql.GraphQLObjectType({
+    name : 'Mutation',
+    fields : ()=>({
+        addPost : {
+            type : PostType,
+            args : {
+                id : {type : graphql.GraphQLString},
+                message : { type : graphql.GraphQLString},
+                user : {type : graphql.GraphQLString}
+            },
+            resolve : (_,args)=>{
+                post = {
+                    id : args.id,
+                    message : args.message,
+                    user : args.user
+                }
+                posts.push(post);
+                return post
+            }
+        }
+    })
+});
 
 const PostType = new graphql.GraphQLObjectType({
     name : 'Post',
@@ -121,7 +141,7 @@ const UserType = new graphql.GraphQLObjectType({
 });
 
 
-const RootSchema = new graphql.GraphQLSchema({query : QueryRoot});
+const RootSchema = new graphql.GraphQLSchema({query : QueryRoot, mutation : MutationRoot});
 
 
 module.exports = {RootSchema};
