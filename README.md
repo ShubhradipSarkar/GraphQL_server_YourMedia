@@ -17,5 +17,6 @@
 
 
 
-- a database for graphql to interract with (eg. postgres)
+
+- a database for graphql to interract with (eg. mongodb atlas)
 - a caching mechanism (redis)
