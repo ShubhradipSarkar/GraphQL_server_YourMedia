@@ -8,7 +8,7 @@ const QueryRoot  = new graphql.GraphQLObjectType({
     fields : () => ({
         hello : {
             type : graphql.GraphQLString,
-            resolve : ()=> "Hello from graphQL!"
+            resolve : ()=> "Hello from graphQL!!"
         },
         user : {
             type : UserType,
@@ -132,14 +132,19 @@ const MutationRoot = new graphql.GraphQLObjectType({
                 message : { type : graphql.GraphQLString},
                 user : {type : graphql.GraphQLString}
             },
-            resolve : (_,args)=>{
-                post = {
+            resolve : async(_,args)=>{
+                const post = new posts({
                     id : args.id,
                     message : args.message,
                     user : args.user
+                });
+                try {
+                    const savedPost = await post.save();
+                    return savedPost;
+                } catch (error) {
+                    console.error('Error:', error.message);
+                    throw new Error('Error adding post');
                 }
-                posts.push(post);
-                return post
             }
         }
     })
