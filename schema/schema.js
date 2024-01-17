@@ -129,13 +129,12 @@ const MutationRoot = new graphql.GraphQLObjectType({
         addPost : {
             type : PostType,
             args : {
-                id : {type : graphql.GraphQLString},
                 message : { type : graphql.GraphQLString},
                 user : {type : graphql.GraphQLString}
             },
             resolve : async(_,args)=>{
                 const post = new posts({
-                    id : args.id,
+                    
                     message : args.message,
                     user : args.user
                 });
@@ -148,6 +147,7 @@ const MutationRoot = new graphql.GraphQLObjectType({
                 }
             }
         }
+        
     })
 });
 
