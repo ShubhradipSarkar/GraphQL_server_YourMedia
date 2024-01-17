@@ -126,6 +126,64 @@ const UserType = new graphql.GraphQLObjectType({
 const MutationRoot = new graphql.GraphQLObjectType({
     name : 'Mutation',
     fields : ()=>({
+        addUser : {
+            type : UserType,
+            args : {
+                username : {type : graphql.GraphQLString},
+            },
+            resolve : async(_, args)=>{
+                const user = new users({
+                    username: args.username,
+                })
+                try {
+                    const savedUser = await user.save();
+                    return savedUser;
+                } catch (error) {
+                    console.error('Error:', error.message);
+                    throw new Error('Error adding User');
+                }
+            }
+        },
+        addFriend : {
+            type : UserType,
+            args : {
+                id : {type : graphql.GraphQLString},
+                friend_id : {type : graphql.GraphQLString}
+            },
+            resolve : async(_,args) => {
+                const friend = new friends({
+                    id : args.id,
+                    friend_id : args.friend_id,
+                });
+                try {
+                    const savedFriend = await friend.save();
+                    return savedFriend;
+                } catch (error) {
+                    console.error('Error:', error.message);
+                    throw new Error('Error adding Friend');
+                }
+            }
+        },
+        addLikes : {
+            type : PostType,
+            args : {
+                post_id : {type : graphql.GraphQLString},
+                liked_by : {type : graphql.GraphQLString}
+            },
+            resolve : async(_,args) => {
+                const like = new likes({
+                    post_id : args.post_id,
+                    liked_by : args.liked_by,
+                });
+                try {
+                    const savedLike = await like.save();
+                    return savedLike;
+                } catch (error) {
+                    console.error('Error:', error.message);
+                    throw new Error('Error adding Like');
+                }
+            }
+        },
         addPost : {
             type : PostType,
             args : {
@@ -147,13 +205,10 @@ const MutationRoot = new graphql.GraphQLObjectType({
                 }
             }
         }
-        
+
     })
 });
 
-
-
 const RootSchema = new graphql.GraphQLSchema({query : QueryRoot, mutation : MutationRoot});
-
 
 module.exports = {RootSchema};
