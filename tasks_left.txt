@@ -11,7 +11,7 @@ schema{
     }
 }
 *** delete user, delete post, delete account, unfriend, remove likes, //TODO
-*** on delete of user, delete rest of the things from linked to it,   //TODO
+*** on delete of user, delete rest of the things linked to it,   //TODO
  
 ** If possible, about chat system // WebSocket // Later
 
