@@ -6,7 +6,6 @@ const userSchema = new mongoose.Schema({
 });
 
 const postSchema = new mongoose.Schema({
-  
   message: String,
   user: String,
 });

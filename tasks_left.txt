@@ -1,0 +1,20 @@
+*** Adding groups   //TODO
+schema{
+    _id
+    users
+    posts{
+        list of post{
+            message
+            likes
+            comments //TODO
+        }
+    }
+}
+*** delete user, delete post, delete account, unfriend, remove likes, //TODO
+*** on delete of user, delete rest of the things from linked to it,   //TODO
+ 
+** If possible, about chat system // WebSocket // Later
+
+* UI // React-Apollo Client // TODO ---> Shubhradip
+
+* Auth // Later ---> Moinak
