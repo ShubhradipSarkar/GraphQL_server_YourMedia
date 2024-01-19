@@ -16,13 +16,20 @@ const likeSchema = new mongoose.Schema({
 });
 
 const FriendSchema = new mongoose.Schema({
-    id: String,
-    friend_id: String,
+    user: String,
+    friend: String,
+})
+
+const commentSchema = new mongoose.Schema({
+  post_id: String,
+  comment: String,
+  commented_by: String,
 })
 
 const users = mongoose.model('users', userSchema);
 const posts = mongoose.model('posts', postSchema);
 const likes = mongoose.model('likes', likeSchema);
 const friends = mongoose.model('friends', FriendSchema);
+const comments = mongoose.model('comments', commentSchema);
 
-module.exports = { users, posts, likes, friends};
+module.exports = { users, posts, likes, friends, comments};
