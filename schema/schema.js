@@ -119,13 +119,18 @@ const UserType = new graphql.GraphQLObjectType({
             type: graphql.GraphQLList(UserType),
             resolve: async(parent, args) => {
                 const own_id = parent._id;
-                console.log(own_id);     // from parent
+                //console.log(own_id);     // from parent
                 
                 const all = await friends.find();
-                console.log(all)         // finding all friends
+                //console.log(all)         // finding all friends
 
-                console.log(typeof(own_id))
-                console.log(typeof(all[0].friend))
+                console.log(own_id);
+                console.log(typeof(own_id._id))
+
+                console.log(all[0].user)
+                console.log(typeof(all[0].user))
+
+                console.log(own_id===all[0].user)
 
                 const userFriends = await friends.find({user:own_id});
                 console.log("....",userFriends)
