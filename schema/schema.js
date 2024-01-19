@@ -1,7 +1,7 @@
 
 const graphql = require("graphql");
 
-const { users, posts, likes, friends} = require('../models/models');
+const { users, posts, likes, friends, Groups, Comments} = require('../models/models');
 
 const QueryRoot  = new graphql.GraphQLObjectType({
     name : 'Query',
@@ -45,8 +45,20 @@ const QueryRoot  = new graphql.GraphQLObjectType({
                 return filtered_posts
             }
         },
+        group:{
+            type: GroupType,
+            args: {
+                group_id:{type: graphql.GraphQLString}
+            },
+            resolve : async(parent, args)=>{
+                const groupId=args.group_id
+                console.log(groupId)
+                const GroupWithId=await Groups.find({_id:groupId})
+                console.log(GroupWithId);
+                return GroupWithId[0]
+            }
+        }
 
-        
     })
 });
 
@@ -96,7 +108,8 @@ const UserType = new graphql.GraphQLObjectType({
             type : graphql.GraphQLList(PostType),
             resolve : async(parent,args)=>{
                 const userid = parent._id;
-                
+                const tit = await posts.find();
+                console.log(tit);
                 const filtered_posts = await posts.find({user : userid});
                 return filtered_posts;
             }
@@ -106,7 +119,18 @@ const UserType = new graphql.GraphQLObjectType({
             type: graphql.GraphQLList(UserType),
             resolve: async(parent, args) => {
                 const own_id = parent._id;
-                const userFriends = await friends.find({id:own_id});
+                console.log(own_id);     // from parent
+                
+                const all = await friends.find();
+                console.log(all)         // finding all friends
+
+                console.log(typeof(own_id))
+                console.log(typeof(all[0].friend))
+
+                const userFriends = await friends.find({user:own_id});
+                console.log("....",userFriends)
+
+
                 const friendIds = userFriends.map((friend) => friend.friend_id);
                 try {
                     const Users = await users.find({ _id: { $in: friendIds } });
@@ -122,6 +146,21 @@ const UserType = new graphql.GraphQLObjectType({
     })
 });
 
+const GroupType = new graphql.GraphQLObjectType({
+    name: 'Group',
+    fields : ()=>({
+        name: {type: graphql.GraphQLString},
+        people: {
+            type: graphql.GraphQLList(UserType),
+            resolve: async(parent, args)=>{
+                const usersOfGroup = await users.find()
+            }
+        },
+        
+        group_posts: {type: graphql.GraphQLList(PostType)},
+
+    })
+})
 
 const MutationRoot = new graphql.GraphQLObjectType({
     name : 'Mutation',
