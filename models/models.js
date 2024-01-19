@@ -26,6 +26,7 @@ const commentSchema = new mongoose.Schema({
   commented_by: String,
 })
 
+
 const users = mongoose.model('users', userSchema);
 const posts = mongoose.model('posts', postSchema);
 const likes = mongoose.model('likes', likeSchema);

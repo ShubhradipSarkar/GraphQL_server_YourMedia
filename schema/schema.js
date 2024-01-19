@@ -45,6 +45,7 @@ const QueryRoot  = new graphql.GraphQLObjectType({
                 return filtered_posts
             }
         },
+        
 
         
     })
@@ -101,25 +102,25 @@ const CommentType = new graphql.GraphQLObjectType({
     fields : ()=>({
         id: {type: graphql.GraphQLString},
         comment : {type: graphql.GraphQLString},
-        commented_by: {
+        commenter: {
             type: UserType,
             resolve: async(parent, args)=>{
                 
                 const commenterId=parent.commented_by;
                 
                 const commenter = await users.find({_id: commenterId});
-                console.log(commenter)
+                //console.log(commenter)
                 return commenter[0];
             },
         },
         
-        post_id: {
-         type:   PostType,
-        resolve: async(parent, args)=>{
-            const postId = parent.post_id;
-            const postCommented = await posts.find({_id: postId});
-            return postCommented;
-        }
+        commentedPost: {
+            type:PostType,
+            resolve: async(parent, args)=>{
+                const postId = parent.post_id;
+                const postCommented = await posts.findOne({_id: postId});
+                return postCommented;
+            }
         }
         
     })
@@ -156,7 +157,14 @@ const UserType = new graphql.GraphQLObjectType({
                 
             },
         },
-        
+        Comments:{
+            type: graphql.GraphQLList(CommentType),
+            resolve: async(parent, args)=>{
+                const userId = parent._id;
+                const commentsByUser = await comments.find({commented_by: userId});
+                return commentsByUser;
+            }
+        }
 
     })
 });
