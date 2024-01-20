@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 require("dotenv").config();
 const app = express()
 const cors = require('cors');
+const PORT = process.env.PORT;
 
 mongoose.connect(process.env.MONGO_URL)
 .then(()=>{console.log("MongodbConnected")})
@@ -17,6 +18,6 @@ app.use('/api' , graphqlHTTP({
     graphiql: true,  
 }));
 
-app.listen(4000, ()=>console.log("Server is running at PORT 4000"));
+app.listen(PORT, ()=>console.log(`Server is running at PORT ${PORT} `));
 
 
