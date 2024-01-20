@@ -4,10 +4,13 @@ const { RootSchema } = require('./schema/schema');
 const mongoose = require('mongoose');
 require("dotenv").config();
 const app = express()
+const cors = require('cors');
 
 mongoose.connect(process.env.MONGO_URL)
 .then(()=>{console.log("MongodbConnected")})
 .catch((err)=>{console.log("Couldn't connect", err)});
+
+app.use(cors());
 
 app.use('/api' , graphqlHTTP({
     schema: RootSchema,
@@ -15,3 +18,5 @@ app.use('/api' , graphqlHTTP({
 }));
 
 app.listen(4000, ()=>console.log("Server is running at PORT 4000"));
+
+
