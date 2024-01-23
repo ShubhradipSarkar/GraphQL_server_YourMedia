@@ -8,6 +8,7 @@ const cors = require('cors');
 const auth = require("./routes/auth");
 const PORT = process.env.PORT;
 const verifyToken = require("./middleware/authMiddleware")
+
 mongoose.connect(process.env.MONGO_URL)
 .then(()=>{console.log("MongodbConnected")})
 .catch((err)=>{console.log("Couldn't connect", err)});
