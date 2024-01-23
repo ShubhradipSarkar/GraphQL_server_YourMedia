@@ -2,8 +2,15 @@ const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
   
-  username: String,
-  password: String,
+  username: {type:String, required:true},
+  password: {type:String, required:true},
+  age: String,
+  city: String,
+  School: String,
+  Relationship: String,
+  work: String,
+  gender: String,
+
 });
 
 const postSchema = new mongoose.Schema({
