@@ -121,7 +121,9 @@ const CommentType = new graphql.GraphQLObjectType({
                 const postCommented = await posts.findOne({_id: postId});
                 return postCommented;
             }
-        }
+        },
+
+        
         
     })
 })
