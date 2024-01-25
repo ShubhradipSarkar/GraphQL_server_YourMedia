@@ -45,7 +45,15 @@ const QueryRoot  = new graphql.GraphQLObjectType({
                 return filtered_posts
             }
         },
-        
+        users:{
+            type: graphql.GraphQLList(UserType),
+            resolve: async()=>{
+                const allUsers = await users.find();
+                console.log(allUsers);
+                return allUsers
+            }
+
+        }
 
         
     })
@@ -93,7 +101,8 @@ const PostType = new graphql.GraphQLObjectType({
 
                 return likers;
             }
-        }
+        },
+        
     })
 })
 
@@ -133,6 +142,13 @@ const UserType = new graphql.GraphQLObjectType({
     fields : ()=>({
         id : {type : graphql.GraphQLString},
         username : {type : graphql.GraphQLString},
+        // email: {type: String, required:true},
+        age: {type : graphql.GraphQLString},
+        city: {type : graphql.GraphQLString},
+        School: {type : graphql.GraphQLString},
+        Relationship: {type : graphql.GraphQLString},
+        work: {type : graphql.GraphQLString},
+        gender: {type : graphql.GraphQLString},
         posts : {
             type : graphql.GraphQLList(PostType),
             resolve : async(parent,args)=>{
