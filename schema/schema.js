@@ -139,8 +139,8 @@ const CommentType = new graphql.GraphQLObjectType({
 const addFriendType = new graphql.GraphQLObjectType({
     name: 'AddFriend',
     fields: ()=>({
-        id: {type: graphql.GraphQLString},
-        friend_id: {type: graphql.GraphQLString}
+        user: {type: graphql.GraphQLString},
+        friend: {type: graphql.GraphQLString}
     })
 })
 const UserType = new graphql.GraphQLObjectType({
@@ -218,13 +218,13 @@ const MutationRoot = new graphql.GraphQLObjectType({
         addFriend : {
             type : addFriendType,
             args : {
-                id : {type : graphql.GraphQLString},
-                friend_id : {type : graphql.GraphQLString}
+                user : {type : graphql.GraphQLString},
+                friend : {type : graphql.GraphQLString}
             },
             resolve : async(_,args) => {
                 const friend = new friends({
-                    id : args.id,
-                    friend_id : args.friend_id,
+                    user : args.user,
+                    friend : args.friend,
                 });
                 try {
                     const savedFriend = await friend.save();
