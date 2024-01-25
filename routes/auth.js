@@ -33,7 +33,7 @@ const express = require('express');
  const token = jwt.sign({ userId: user._id }, 'pappi123', {
  expiresIn: '10h',
  });
- res.status(200).json({ token });
+ res.status(200).json({ token, username: user.username, userId: user._id });
  } catch (error) {
  res.status(500).json({ error: 'Login failed' });
  }
