@@ -224,6 +224,24 @@ const UserType = new graphql.GraphQLObjectType({
                 const commentsByUser = await comments.find({commented_by: userId});
                 return commentsByUser;
             }
+        },
+        Feed:{
+            type: graphql.GraphQLList(PostType),
+            resolve: async(parent, args)=>{
+                const userId = parent.id;
+                const Friends = await friends.find({friend: userId});
+                
+                Friends.push({user:parent.id});
+                const postsForFriends = await Promise.all(
+                    Friends.map(async (friend) => {
+                        return await posts.find({ user: friend.user });
+                    })
+                );
+                
+                const FeedPosts = postsForFriends.flat();
+                const sortedData = FeedPosts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                return sortedData
+            }
         }
 
     })
