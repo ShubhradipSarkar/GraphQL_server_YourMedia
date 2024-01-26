@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({encoded: false}))
 
 app.use('/auth', auth);   // For register and log in
-app.use('/api' , graphqlHTTP({   // For other queries and updates
+app.use('/api' ,verifyToken, graphqlHTTP({   // For other queries and updates
     schema: RootSchema,
     graphiql: true,  
 }));
