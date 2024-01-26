@@ -164,7 +164,34 @@ const UserType = new graphql.GraphQLObjectType({
                 return filtered_posts;
             }
         },
+        friendRequests: {
+            type: graphql.GraphQLList(UserType),
+            resolve: async(parent, args) => {
+                const user = parent._id;
+                const userFriends = await friends.find({friend: user});
+                const friendIds = userFriends.map((friend) => friend.user);
+                
+                try {
+                    const Users = await users.find({ _id: { $in: friendIds } });
+                    
+                    const RealRequests = Users.map(async(userittr)=>{
+                        const currUser = userittr;
+                       
+                        const isFriendAlready = await friends.findOne({user: user._id, friend:currUser._id});
+                        
+                        if(isFriendAlready===null){
+                            return currUser
+                        }
+                    })
 
+                    return RealRequests
+                    
+                } catch (error) {
+                    console.error('Error:', error.message);
+                    throw new Error('Error fetching friends');
+                }
+            }
+        },
         friends: {
             type: graphql.GraphQLList(UserType),
             resolve: async(parent, args) => {
