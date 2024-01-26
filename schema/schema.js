@@ -286,13 +286,15 @@ const MutationRoot = new graphql.GraphQLObjectType({
             type : PostType,
             args : {
                 message : { type : graphql.GraphQLString},
-                user : {type : graphql.GraphQLString}
+                user : {type : graphql.GraphQLString},
+                createdAt: {type: graphql.GraphQLString}
             },
             resolve : async(_,args)=>{
                 const post = new posts({
                     
                     message : args.message,
-                    user : args.user
+                    user : args.user,
+                    createdAt: args.createdAt
                 });
                 try {
                     const savedPost = await post.save();

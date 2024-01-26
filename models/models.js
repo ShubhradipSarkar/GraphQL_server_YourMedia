@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
 const postSchema = new mongoose.Schema({
   message: String,
   user: String,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const likeSchema = new mongoose.Schema({
