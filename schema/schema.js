@@ -196,8 +196,8 @@ const UserType = new graphql.GraphQLObjectType({
             type: graphql.GraphQLList(UserType),
             resolve: async(parent, args) => {
                 const own_id = parent._id;
-                const userFriends = await friends.find({user:own_id});
-                const friendIds = userFriends.map((friend) => friend.friend);
+                const userFriends = await friends.find({friend:own_id});
+                const friendIds = userFriends.map((friend) => friend.user);
                 try {
                     const Users = await users.find({ _id: { $in: friendIds } });
                     return Users;
