@@ -65,6 +65,7 @@ const PostType = new graphql.GraphQLObjectType({
     fields : ()=>({
         id : {type : graphql.GraphQLString},
         message : {type : graphql.GraphQLString},
+        createdAt: {type: graphql.GraphQLString},
         user : {
             type : UserType,
             resolve : async(post,args)=>{
@@ -141,6 +142,14 @@ const addFriendType = new graphql.GraphQLObjectType({
     fields: ()=>({
         user: {type: graphql.GraphQLString},
         friend: {type: graphql.GraphQLString}
+    })
+})
+const addPostType = new graphql.GraphQLObjectType({
+    name: 'AddPost',
+    fields: ()=>({
+        user: {type: graphql.GraphQLString},
+        message: {type: graphql.GraphQLString},
+        createdAt: {type: graphql.GraphQLString}
     })
 })
 const UserType = new graphql.GraphQLObjectType({
@@ -283,7 +292,7 @@ const MutationRoot = new graphql.GraphQLObjectType({
             }
         },
         addPost : {
-            type : PostType,
+            type : addPostType,
             args : {
                 message : { type : graphql.GraphQLString},
                 user : {type : graphql.GraphQLString},
