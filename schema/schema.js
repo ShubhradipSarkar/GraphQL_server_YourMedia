@@ -195,10 +195,10 @@ const UserType = new graphql.GraphQLObjectType({
                         user.presentInFriends = "Disconnect";
                     }
                     else if(direction1 && !direction2){
-                        user.presentInFriends = "Accept Connection";
+                        user.presentInFriends = "Accept...";
                     }
                     else if(!direction1 && direction2){
-                        user.presentInFriends = "Remove Connection";
+                        user.presentInFriends = "Sent...";
                     }
                     else{
                         user.presentInFriends = "Connect";
