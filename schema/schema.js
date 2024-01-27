@@ -188,7 +188,10 @@ const UserType = new graphql.GraphQLObjectType({
                 const all = allUsers.map(async(user)=>{
                     const direction1 = await friends.findOne({user: user.id, friend: parent.id});
                     const direction2 = await friends.findOne({user: parent.id, friend: user.id});
-                    if(direction1 && direction2){
+                    if(user.id===parent.id){
+                        user.presentInFriends = "";
+                    }
+                    else if(direction1 && direction2){
                         user.presentInFriends = "Disconnect";
                     }
                     else if(direction1 && !direction2){
@@ -200,10 +203,7 @@ const UserType = new graphql.GraphQLObjectType({
                     else{
                         user.presentInFriends = "Connect";
                     }
-                    if(user.id!==parent.id){
-                        return user
-                    }
-                    
+                    return user;
                 })
                 //console.log(all);
                 return all
