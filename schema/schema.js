@@ -159,7 +159,14 @@ const addLikeType = new graphql.GraphQLObjectType({
         post_id:{type: graphql.GraphQLString},
         liked_by:{type: graphql.GraphQLString}
     })
-})
+});
+const removeLikesType = new graphql.GraphQLObjectType({
+    name: 'RemoveLikes',
+    fields: () => ({
+      success: { type: graphql.GraphQLBoolean },
+      message: { type: graphql.GraphQLString },
+    }),
+  });
 const UserType = new graphql.GraphQLObjectType({
     name : 'User',
     fields : ()=>({
@@ -317,6 +324,30 @@ const MutationRoot = new graphql.GraphQLObjectType({
                 }
             }
         },
+        removeLikes: {
+            type: removeLikesType,
+            args: {
+              post_id: { type: graphql.GraphQLString },
+              liked_by: { type: graphql.GraphQLString },
+            },
+            resolve: async (_, args) => {
+              try {
+                const removedLike = await likes.findOneAndDelete({
+                  post_id: args.post_id,
+                  liked_by: args.liked_by,
+                });
+      
+                if (removedLike) {
+                  return { success: true, message: 'Like removed successfully' };
+                } else {
+                  return { success: false, message: 'Like not found' };
+                }
+              } catch (error) {
+                console.error('Error:', error.message);
+                throw new Error('Error removing Like');
+              }
+            },
+          },    
         addPost : {
             type : addPostType,
             args : {

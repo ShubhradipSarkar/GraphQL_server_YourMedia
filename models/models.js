@@ -27,6 +27,7 @@ const likeSchema = new mongoose.Schema({
   post_id: String,
   liked_by: String,
 });
+likeSchema.index({ post_id: 1, liked_by: 1 }, { unique: true });
 
 const FriendSchema = new mongoose.Schema({
     user: String,
