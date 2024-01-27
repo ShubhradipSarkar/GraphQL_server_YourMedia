@@ -200,7 +200,10 @@ const UserType = new graphql.GraphQLObjectType({
                     else{
                         user.presentInFriends = "Connect";
                     }
-                    return user
+                    if(user.id!==parent.id){
+                        return user
+                    }
+                    
                 })
                 //console.log(all);
                 return all
