@@ -1,5 +1,6 @@
 
 const graphql = require("graphql");
+//const {GraphQLDateTime} = require("graphql-iso-date")
 
 const { users, posts, likes, friends, comments} = require('../models/models');
 
@@ -152,6 +153,13 @@ const addPostType = new graphql.GraphQLObjectType({
         createdAt: {type: graphql.GraphQLString}
     })
 })
+const addLikeType = new graphql.GraphQLObjectType({
+    name: 'AddLike',
+    fields: ()=>({
+        post_id:{type: graphql.GraphQLString},
+        liked_by:{type: graphql.GraphQLString}
+    })
+})
 const UserType = new graphql.GraphQLObjectType({
     name : 'User',
     fields : ()=>({
@@ -290,7 +298,7 @@ const MutationRoot = new graphql.GraphQLObjectType({
             }
         },
         addLikes : {
-            type : PostType,
+            type : addLikeType,
             args : {
                 post_id : {type : graphql.GraphQLString},
                 liked_by : {type : graphql.GraphQLString}
