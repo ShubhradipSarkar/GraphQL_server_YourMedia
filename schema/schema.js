@@ -179,6 +179,34 @@ const UserType = new graphql.GraphQLObjectType({
         Relationship: {type : graphql.GraphQLString},
         work: {type : graphql.GraphQLString},
         gender: {type : graphql.GraphQLString},
+        users:{
+            type: graphql.GraphQLList(UserType),
+            
+            resolve: async(parent, args)=>{
+                const allUsers = await users.find();
+                const friendList = await friends.find();
+                const all = allUsers.map(async(user)=>{
+                    const direction1 = await friends.findOne({user: user.id, friend: parent.id});
+                    const direction2 = await friends.findOne({user: parent.id, friend: user.id});
+                    if(direction1 && direction2){
+                        user.presentInFriends = "Disconnect";
+                    }
+                    else if(direction1 && !direction2){
+                        user.presentInFriends = "Accept Connection";
+                    }
+                    else if(!direction1 && direction2){
+                        user.presentInFriends = "Remove Connection";
+                    }
+                    else{
+                        user.presentInFriends = "Connect";
+                    }
+                    return user
+                })
+                //console.log(all);
+                return all
+            }
+
+        },
         posts : {
             type : graphql.GraphQLList(PostType),
             resolve : async(parent,args)=>{
@@ -187,6 +215,9 @@ const UserType = new graphql.GraphQLObjectType({
                 const filtered_posts = await posts.find({user : userid});
                 return filtered_posts;
             }
+        },
+        presentInFriends: {
+           type: graphql.GraphQLString
         },
         friendRequests: {
             type: graphql.GraphQLList(UserType),
@@ -258,6 +289,7 @@ const UserType = new graphql.GraphQLObjectType({
                 return sortedData
             }
         }
+        
 
     })
 });
@@ -347,7 +379,7 @@ const MutationRoot = new graphql.GraphQLObjectType({
                 throw new Error('Error removing Like');
               }
             },
-          },    
+        },    
         addPost : {
             type : addPostType,
             args : {
