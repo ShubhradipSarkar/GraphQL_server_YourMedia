@@ -3,6 +3,8 @@ const express = require('express');
  const {users} = require("../models/models")
  const bcrypt = require('bcrypt');
  const jwt = require('jsonwebtoken');
+ //import Blacklist from '../models/Blacklist.js';
+ const {blacklist} = require("../models/models")
 
 // User registration
  router.post('/register', async (req, res) => {
@@ -33,10 +35,12 @@ const express = require('express');
  const token = jwt.sign({ userId: user._id }, 'pappi123', {
  expiresIn: '10h',
  });
+ 
  res.status(200).json({ token, username: user.username, userId: user._id });
  } catch (error) {
  res.status(500).json({ error: 'Login failed' });
  }
  });
 
+ 
 module.exports = router;

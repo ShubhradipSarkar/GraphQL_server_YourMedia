@@ -145,6 +145,14 @@ const addFriendType = new graphql.GraphQLObjectType({
         friend: {type: graphql.GraphQLString}
     })
 })
+const addCommentType = new graphql.GraphQLObjectType({
+    name: 'AddComment',
+    fields: ()=>({
+        comment: {type: graphql.GraphQLString},
+        commented_by: {type: graphql.GraphQLString},
+        post_id: {type: graphql.GraphQLString}
+    })
+})
 const addPostType = new graphql.GraphQLObjectType({
     name: 'AddPost',
     fields: ()=>({
@@ -336,6 +344,28 @@ const MutationRoot = new graphql.GraphQLObjectType({
                 } catch (error) {
                     console.error('Error:', error.message);
                     throw new Error('Error adding Friend');
+                }
+            }
+        },
+        addComments: {
+            type: addCommentType,
+            args: {
+                comment: {type: graphql.GraphQLString},
+                commented_by: {type: graphql.GraphQLString},
+                post_id: {type: graphql.GraphQLString}
+            },
+            resolve: async(_, args) => {
+                const cmnt = new comments({
+                    comment: args.comment,
+                    commented_by: args.commented_by,
+                    post_id: args.post_id,
+                })
+                try {
+                    const savedComment = await cmnt.save();
+                    return savedComment;
+                } catch (error) {
+                    console.error('Error:', error.message);
+                    throw new Error('Error adding Comment');
                 }
             }
         },
