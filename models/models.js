@@ -49,12 +49,6 @@ const commentSchema = new mongoose.Schema({
   commented_by: String,
 })
 
-const nottificationSchema = new mongoose.Schema({
-  post_id: String,
-  post_of: String,
-  type: String,
-  user: String,
-})
 
 const users = mongoose.model('users', userSchema);
 const posts = mongoose.model('posts', postSchema);
@@ -62,5 +56,5 @@ const likes = mongoose.model('likes', likeSchema);
 const friends = mongoose.model('friends', FriendSchema);
 const comments = mongoose.model('comments', commentSchema);
 const blacklist = mongoose.model('blacklist', BlacklistSchema);
-const notifications = mongoose.model('notifications', nottificationSchema);
-module.exports = { users, posts, likes, friends, comments, blacklist, notifications};
+
+module.exports = { users, posts, likes, friends, comments, blacklist};

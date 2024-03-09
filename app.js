@@ -1,5 +1,4 @@
 const express = require('express');
-
 const graphqlHTTP = require('express-graphql').graphqlHTTP;
 const { RootSchema } = require('./schema/schema');
 const mongoose = require('mongoose');
@@ -7,30 +6,10 @@ require("dotenv").config();
 const app = express()
 const cors = require('cors');
 const auth = require("./routes/auth");
-const PORT = process.env.PORT||4000;
+const PORT = process.env.PORT;
 const verifyToken = require("./middleware/authMiddleware")
-// const { Server } = require("socket.io")
-// var http = require('http');
-// var server = http.createServer(app);
-// var io = new Server(server,{
-//     cors:{
-//         origin: '*'
-//     }
-// });
-// //const server = new Server(app)
-// io.on("connection", (socket)=>{
-//     console.log("User connected");
-//     console.log("ID", socket.id);
-//     socket.emit("welcome", `welcome to the server ${socket.id}`);
-//     socket.broadcast.emit("welcome", `${socket.id} joined the server...`);
 
-//     socket.on("message", ({message, room})=>{
-//         //console.log(data);
-//         io.to(room).emit("receive",message);   
-//     })
-// })
-
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGO_URL||4000)
 .then(()=>{console.log("Mongodb Connected")})
 .catch((err)=>{console.log("Couldn't connect to Database", err)});
 
@@ -45,7 +24,5 @@ app.use('/api' ,verifyToken, graphqlHTTP({   // For other queries and updates
     graphiql: true,  
 }));
 
-
 app.listen(PORT, ()=>console.log(`Server is running at PORT ${PORT}`));
-
 

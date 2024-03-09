@@ -2,7 +2,7 @@
 const graphql = require("graphql");
 //const {GraphQLDateTime} = require("graphql-iso-date")
 
-const { users, posts, likes, friends, comments, notifications} = require('../models/models');
+const { users, posts, likes, friends, comments} = require('../models/models');
 
 const QueryRoot  = new graphql.GraphQLObjectType({
     name : 'Query',
@@ -105,26 +105,6 @@ const PostType = new graphql.GraphQLObjectType({
             }
         },
         
-    })
-})
-
-const NotificationType = new graphql.GraphQLObjectType({
-    name: 'Notification',
-    fields: ()=>({
-        post_id: {type: graphql.GraphQLString},
-        post_of: {type: graphql.GraphQLString},
-        type: {type: graphql.GraphQLString},
-       
-        user : {
-            type : UserType,
-            resolve : async(notify,args)=>{
-                const userid = notify.user;
-                //console.log("userid = ", userid);
-                const whoSentNotify = await users.findOne({_id:userid});
-                //console.log(whoSentNotify)
-                return whoSentNotify;
-            }
-        },
     })
 })
 
@@ -319,15 +299,7 @@ const UserType = new graphql.GraphQLObjectType({
                 const sortedData = FeedPosts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                 return sortedData
             }
-        },
-        Notifications:{
-            type: graphql.GraphQLList(NotificationType),
-            resolve: async(parent, args)=>{
-                const id = parent.id;
-                const notifies = await notifications.find({post_of: id});
-                return notifies;
-            }
-        },
+        }
         
 
     })
@@ -431,7 +403,7 @@ const MutationRoot = new graphql.GraphQLObjectType({
                 });
       
                 if (removedLike) {
-                    return { success: true, message: 'Like removed successfully' };
+                  return { success: true, message: 'Like removed successfully' };
                 } else {
                   return { success: false, message: 'Like not found' };
                 }
